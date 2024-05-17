@@ -1,15 +1,16 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, CheckConstraint
 from sqlalchemy.orm import relationship
-from database import Base
+from .database import Base
 
 class User(Base):
     __tablename__ = 'users'
 
     user_id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), nullable=False)
-    password_hash = Column(String(50), nullable=False)
+    password_hash = Column(String(128), nullable=False)
     email = Column(String(100), nullable=False)
     role = Column(String(20), nullable=False)
+    
     __table_args__ = (
         CheckConstraint("role IN ('HR Admin', 'Staff')", name='check_role'),
     )

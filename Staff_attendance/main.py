@@ -1,10 +1,10 @@
-from fastapi import FastAPI
-from database import engine, SessionLocal, Base
-import attendance
+from fastapi import APIRouter
+from .database import engine, SessionLocal, Base
+from . import attendance
 
 
 # Create FastAPI app instance
-app = FastAPI()
+app = APIRouter()
 
 # Include routers
 app.include_router(attendance.router)

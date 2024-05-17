@@ -3,12 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from databases import Database
 from sqlalchemy_utils import create_database, database_exists
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-# from app.config import settings
 
-DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost/feedback"
+DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost/feedback1"
 
 database = Database(DATABASE_URL)
 engine = create_engine(DATABASE_URL.replace("asyncpg", "psycopg2"))

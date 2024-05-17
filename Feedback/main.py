@@ -1,10 +1,10 @@
-from fastapi import FastAPI
-from database import database, engine, Base
-from feedback import user, feedback_form, question, response, objective
+from fastapi import APIRouter
+from .database import database, engine, Base
+from .feedback import user, feedback_form, question, response, objective
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = APIRouter()
 
 app.include_router(user.router)
 app.include_router(feedback_form.router)
