@@ -1,11 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import models, schema, database
+from . import models, schema, database
 from sqlalchemy.ext.declarative import declarative_base
-from database import engine
+from .database import engine
 
 Base = declarative_base()
-app = FastAPI()
+app = APIRouter()
 
 # Dependency to get the database session
 def get_db():
@@ -37,7 +37,7 @@ def create_shift(shift: schema.ShiftCreate, db: Session = Depends(get_db)):
 #     db.refresh(db_shift)
 #     return db_shift
 
-@app.post("/subjects/", response_model=schema.SubjectBase)
+@app.post("/subjects/", response_model=schema.SubjectResponse)
 def create_subject(subject: schema.SubjectCreate, db: Session = Depends(get_db)):
     db_subject = models.Subject(**subject.dict())
     db.add(db_subject)

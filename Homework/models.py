@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date, Text, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from database import engine
+from .database import engine
 
 Base = declarative_base()
 

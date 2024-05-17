@@ -1,14 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
-import schemas
-from database import SessionLocal, engine
+from . import schemas
+from .database import SessionLocal, engine
 from sqlalchemy.orm import sessionmaker
-from models import Base, FeePayment
+from .models import Base, FeePayment
 import stripe
 
 stripe.api_key = "your_stripe_api_key"  # Set your Stripe API key here
 
-app = FastAPI()
+app = APIRouter()
 
 # Dependency to get database session
 def get_db():

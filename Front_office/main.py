@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import models, database, schema
+from . import models, database, schema
 
-app = FastAPI()
+app = APIRouter()
 
 # Dependency to get the database session
 def get_db():

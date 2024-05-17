@@ -3,7 +3,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Time
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from database import engine
+from .database import engine
 Base = declarative_base()
 
 class Shift(Base):

@@ -27,6 +27,11 @@ class SubjectBase(BaseModel):
 class SubjectCreate(SubjectBase):
     pass
 
+class SubjectResponse(BaseModel):
+    SubjectID : int
+    SubjectName :str
+    Department :str
+
 class TeacherBase(BaseModel):
     TeacherName: str
     Department: Optional[str]

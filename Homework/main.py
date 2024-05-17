@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import models, database
-from schemas import HomeworkAssignmentCreate, GradeCreate, HomeworkSubmission  # Import the required classes from schemas
+from . import models, database
+from .schemas import HomeworkAssignmentCreate, GradeCreate, HomeworkSubmission  # Import the required classes from schemas
 
-app = FastAPI()
+app = APIRouter()
 
 # Dependency to get the database session
 def get_db():
