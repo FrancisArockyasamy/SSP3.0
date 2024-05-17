@@ -28,4 +28,34 @@ class Student(StudentBase):
     class Config:
         orm_mode = True
 
+
+class MarkBase(BaseModel):
+    mark_id: int
+    exam_subject_id: int
+    student_id: int
+    marks: int 
+
+
+class ExaminationCreate(BaseModel):
+    exam_id : int
+    exam_name : str
+    exam_type :str
+    class_id :int
+    grading_system : str
+
+
+class CreateClass(BaseModel):
+    class_id:int
+    class_name:str
+
+class ExaminationCreate(BaseModel):
+    pass
+
+class ExaminationUpdate(BaseModel):
+    pass
+
+class Examination(BaseModel):
+    exam_id: int
+
+
 # Define schemas for other tables similarly
