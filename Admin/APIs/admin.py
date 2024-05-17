@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from settings.db import get_db
-from settings.auth import encrypt_pwd, verify_pwd, genToken, authenticate
-from schemas import admin as admin_schema
-from models import admin as admin_model
+from ..settings.db import get_db
+from ..settings.auth import encrypt_pwd, verify_pwd, genToken, authenticate
+from ..schemas import admin as admin_schema
+from ..models import admin as admin_model
 from sqlalchemy.orm import Session
 from typing import List
 from fastapi.security import OAuth2PasswordRequestForm

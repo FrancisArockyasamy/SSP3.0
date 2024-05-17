@@ -1,8 +1,8 @@
 from fastapi import APIRouter , Body , Depends , HTTPException , status
 from sqlalchemy.orm import Session
-from models import ClassSubject , Class , Subject
-import schemas
-from db import get_db
+from ..models import ClassSubject , Class , Subject
+from .. import schemas
+from .. db import get_db
 
 app=APIRouter(tags=['Class Wise Subjects'])
 

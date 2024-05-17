@@ -1,11 +1,11 @@
-from fastapi import FastAPI ,Depends
+from fastapi import APIRouter ,Depends
 from sqlalchemy.orm import Session
-from db import get_db , engine
-from models import Base
-from routes import classes , subjects , staffs , class_wise_subjects , class_wise_staff_allocation , rooms , class_room_allotement
+from .db import get_db , engine
+from .models import Base
+from .routes import classes , subjects , staffs , class_wise_subjects , class_wise_staff_allocation , rooms , class_room_allotement
 
 
-app = FastAPI(title="SSP3.0")
+app = APIRouter()
 app.include_router(classes.app)
 app.include_router(subjects.app)
 app.include_router(staffs.app)

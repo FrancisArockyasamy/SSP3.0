@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Body, HTTPException
 from sqlalchemy.orm import Session
 
-from models import Staff
-import schemas
-from db import get_db
+from ..models import Staff
+from .. import schemas
+from ..db import get_db
 
 app=APIRouter(tags=["Staffs"])
 

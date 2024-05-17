@@ -1,9 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException , APIRouter
 from sqlalchemy.orm import Session
-from db import get_db
+from ..db import get_db
 
-from models import Class  # Assuming models.py is in the same directory
-import schemas  # Assuming schemas.py is in the same directory
+from ..models import Class  # Assuming models.py is in the same directory
+from .. import schemas  # Assuming schemas.py is in the same directory
 
 app = APIRouter(tags=["Classes"])
 

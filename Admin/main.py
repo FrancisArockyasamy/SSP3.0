@@ -1,9 +1,7 @@
-from fastapi import FastAPI
-from APIs import admin
+from fastapi import APIRouter
+from .APIs import admin
 
-app = FastAPI(
-    title="SSP-3.0 API",
-    version="1.0"
+app = APIRouter(
 )
 
 @app.get('/')

@@ -1,6 +1,6 @@
 from fastapi import APIRouter , Depends , HTTPException , status
-from db import get_db
-from models import Class , Staff ,ClassStaff , Subject
+from ..db import get_db
+from ..models import Class , Staff ,ClassStaff , Subject
 from sqlalchemy.orm import Session
 
 app = APIRouter(tags=["Class Wise Staff Allocation"])

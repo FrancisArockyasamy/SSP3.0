@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, URL, text
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy_utils import database_exists, create_database
-from settings.config import secret
+from ..settings.config import secret
 
 # database connection code here
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter , Depends , HTTPException
-from db import get_db
-from  models import Room
+from ..db import get_db
+from  ..models import Room
 from sqlalchemy.orm import Session
-import schemas
+from .. import schemas
 
 app = APIRouter(tags=["Rooms"])
 

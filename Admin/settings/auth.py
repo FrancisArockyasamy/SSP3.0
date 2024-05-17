@@ -1,6 +1,6 @@
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
-from settings.config import secret
+from ..settings.config import secret
 from jose import JWTError, jwt
 from fastapi import HTTPException, status, Depends
 from datetime import datetime, timedelta, timezone

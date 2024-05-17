@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Text , Date , Unique
 from typing import Optional 
 from datetime import datetime , date
 from sqlalchemy.orm import relationship
-from db import Base
+from .db import Base
 
 
 
