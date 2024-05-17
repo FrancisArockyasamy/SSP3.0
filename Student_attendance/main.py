@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException,Depends
+from fastapi import FastAPI, HTTPException,Depends,APIRouter
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
-from models import Base, Student, Attendance
-from database import SessionLocal, engine
+from .models import Base, Student, Attendance
+from .database import SessionLocal, engine
 from datetime import date
 
-app = FastAPI()
+app = APIRouter()
 
 # Dependency to get the database session
 def get_db():
