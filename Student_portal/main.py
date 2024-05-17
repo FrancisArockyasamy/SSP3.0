@@ -1,13 +1,15 @@
 # main.py
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from typing import List
-import models, schemas, crud
-from database import SessionLocal, engine
+from . import models, schemas, crud
 
-app = FastAPI()
+from .database import SessionLocal, engine
 
-models.Base.metadata.create_all(bind=engine)
+app= APIRouter(
+    prefix="/studentPortal",
+    tags=["Student Portal"]
+)
 
 # Dependency to get the database session
 def get_db():

@@ -1,11 +1,13 @@
-from fastapi import FastAPI, HTTPException, Depends, status
-from models import *
-from schemas import *
-from database import SessionLocal
+from fastapi import FastAPI, HTTPException, Depends, APIRouter
+from .models import *
+from .schemas import *
+from .database import SessionLocal
 from sqlalchemy.orm import Session
 
-app = FastAPI()
-
+app= APIRouter(
+    prefix="/inventory",
+    tags=["Inventory"]
+)
 # Dependency to get database session
 def get_db():
     db = SessionLocal()

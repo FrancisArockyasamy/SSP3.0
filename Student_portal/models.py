@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Float, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from .database import Base, engine
 
 Base = declarative_base()
 
@@ -144,3 +145,5 @@ class FeePayment(Base):
     receipt_url = Column(String)
 
     student = relationship("Student", back_populates="fee_payments")
+
+Base.metadata.create_all(engine)
