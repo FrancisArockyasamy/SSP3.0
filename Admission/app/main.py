@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from .database import engine, Base
 from .routers import users, admission_forms, form_fields, applicants, applicant_details, interviews, classes, admissions
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = APIRouter()
 
 app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(admission_forms.router, prefix="/admission_forms", tags=["admission_forms"])
