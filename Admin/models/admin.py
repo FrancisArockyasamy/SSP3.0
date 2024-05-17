@@ -24,7 +24,7 @@ class User(Base):
     email = Column(String)
     role_id = Column(Integer, ForeignKey('tbl_roles.role_id', ondelete='CASCADE'))
     is_active = Column(Boolean)
-    school_id = Column(Integer, ForeignKey('tbl_schools.school_id', ondelete='CASCADE'), default_value=None)  # Added school_id
+    school_id = Column(Integer, ForeignKey('tbl_schools.school_id', ondelete='CASCADE'), server_default=None)  # Added school_id
 
 class ModuleFeature(Base):
     __tablename__ = 'tbl_module_features'
