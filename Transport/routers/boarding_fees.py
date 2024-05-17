@@ -24,3 +24,23 @@ async def read_boarding_fee(fee_id: int, db: Session = Depends(database.get_db))
     if boarding_fee is None:
         raise HTTPException(status_code=404, detail="Boarding fee not found")
     return boarding_fee
+
+@router.put("/boarding_fees/{fee_id}", response_model=schemas.BoardingFee)
+async def update_boarding_fee(fee_id: int, boarding_fee: schemas.BoardingFeeCreate, db: Session = Depends(database.get_db)):
+    db_boarding_fee = db.query(models.BoardingFee).filter(models.BoardingFee.fee_id == fee_id).first()
+    if db_boarding_fee is None:
+        raise HTTPException(status_code=404, detail="Boarding fee not found")
+    for key, value in boarding_fee.dict().items():
+        setattr(db_boarding_fee, key, value)
+    db.commit()
+    db.refresh(db_boarding_fee)
+    return db_boarding_fee
+
+@router.delete("/boarding_fees/{fee_id}", response_model=schemas.BoardingFee)
+async def delete_boarding_fee(fee_id: int, db: Session = Depends(database.get_db)):
+    db_boarding_fee = db.query(models.BoardingFee).filter(models.BoardingFee.fee_id == fee_id).first()
+    if db_boarding_fee is None:
+        raise HTTPException(status_code=404, detail="Boarding fee not found")
+    db.delete(db_boarding_fee)
+    db.commit()
+    return db_boarding_fee

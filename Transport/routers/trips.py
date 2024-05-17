@@ -24,3 +24,26 @@ async def read_trip(trip_id: int, db: Session = Depends(database.get_db)):
     if trip is None:
         raise HTTPException(status_code=404, detail="Trip not found")
     return trip
+
+@router.put("/trips/{trip_id}", response_model=schemas.Trip)
+async def update_trip(trip_id: int, trip: schemas.TripCreate, db: Session = Depends(database.get_db)):
+    db_trip = db.query(models.Trip).filter(models.Trip.trip_id == trip_id).first()
+    if db_trip is None:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    for key, value in trip.dict().items():
+        setattr(db_trip, key, value)
+    
+    db.commit()
+    db.refresh(db_trip)
+    return db_trip
+
+@router.delete("/trips/{trip_id}", response_model=schemas.Trip)
+async def delete_trip(trip_id: int, db: Session = Depends(database.get_db)):
+    db_trip = db.query(models.Trip).filter(models.Trip.trip_id == trip_id).first()
+    if db_trip is None:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    
+    db.delete(db_trip)
+    db.commit()
+    return db_trip

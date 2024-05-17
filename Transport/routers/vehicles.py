@@ -24,3 +24,26 @@ async def read_vehicle(vehicle_id: int, db: Session = Depends(database.get_db)):
     if vehicle is None:
         raise HTTPException(status_code=404, detail="Vehicle not found")
     return vehicle
+
+@router.put("/vehicles/{vehicle_id}", response_model=schemas.Vehicle)
+async def update_vehicle(vehicle_id: int, vehicle: schemas.VehicleUpdate, db: Session = Depends(database.get_db)):
+    db_vehicle = db.query(models.Vehicle).filter(models.Vehicle.vehicle_id == vehicle_id).first()
+    if db_vehicle is None:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+    
+    for key, value in vehicle.dict().items():
+        setattr(db_vehicle, key, value)
+    
+    db.commit()
+    db.refresh(db_vehicle)
+    return db_vehicle
+
+@router.delete("/vehicles/{vehicle_id}", response_model=schemas.Vehicle)
+async def delete_vehicle(vehicle_id: int, db: Session = Depends(database.get_db)):
+    db_vehicle = db.query(models.Vehicle).filter(models.Vehicle.vehicle_id == vehicle_id).first()
+    if db_vehicle is None:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+    
+    db.delete(db_vehicle)
+    db.commit()
+    return db_vehicle

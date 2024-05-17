@@ -67,6 +67,9 @@ class VehicleBase(BaseModel):
 class VehicleCreate(VehicleBase):
     pass
 
+class VehicleUpdate(VehicleBase):
+    pass
+
 class Vehicle(VehicleBase):
     vehicle_id: int
     class Config:
@@ -100,6 +103,11 @@ class Fee(FeeBase):
     trip_id: int
     class Config:
         orm_mode = True
+        
+class FeeGet(FeeBase):
+    fee_id: int
+    class Config:
+        orm_mode = True
 
 class PassengerTripCreate(BaseModel):
     name: str
@@ -125,6 +133,7 @@ class PassengerTripCreate(BaseModel):
 
 class PassengerByBus(BaseModel):
     bus_number: str
+    trip_number: str
     passengers: List[str]
 
     class Config:

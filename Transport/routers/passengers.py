@@ -24,3 +24,23 @@ async def read_passenger(passenger_id: int, db: Session = Depends(database.get_d
     if passenger is None:
         raise HTTPException(status_code=404, detail="Passenger not found")
     return passenger
+
+@router.put("/passengers/{passenger_id}", response_model=schemas.Passenger)
+async def update_passenger(passenger_id: int, passenger: schemas.PassengerCreate, db: Session = Depends(database.get_db)):
+    db_passenger = db.query(models.Passenger).filter(models.Passenger.passenger_id == passenger_id).first()
+    if db_passenger is None:
+        raise HTTPException(status_code=404, detail="Passenger not found")
+    for key, value in passenger.dict().items():
+        setattr(db_passenger, key, value)
+    db.commit()
+    db.refresh(db_passenger)
+    return db_passenger
+
+@router.delete("/passengers/{passenger_id}", response_model=schemas.Passenger)
+async def delete_passenger(passenger_id: int, db: Session = Depends(database.get_db)):
+    db_passenger = db.query(models.Passenger).filter(models.Passenger.passenger_id == passenger_id).first()
+    if db_passenger is None:
+        raise HTTPException(status_code=404, detail="Passenger not found")
+    db.delete(db_passenger)
+    db.commit()
+    return db_passenger

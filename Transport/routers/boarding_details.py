@@ -24,3 +24,23 @@ async def read_boarding_detail(boarding_id: int, db: Session = Depends(database.
     if boarding_detail is None:
         raise HTTPException(status_code=404, detail="Boarding detail not found")
     return boarding_detail
+
+@router.put("/boarding_details/{boarding_id}", response_model=schemas.BoardingDetail)
+async def update_boarding_detail(boarding_id: int, boarding_detail: schemas.BoardingDetailCreate, db: Session = Depends(database.get_db)):
+    db_boarding_detail = db.query(models.BoardingDetail).filter(models.BoardingDetail.boarding_id == boarding_id).first()
+    if db_boarding_detail is None:
+        raise HTTPException(status_code=404, detail="Boarding detail not found")
+    for key, value in boarding_detail.dict().items():
+        setattr(db_boarding_detail, key, value)
+    db.commit()
+    db.refresh(db_boarding_detail)
+    return db_boarding_detail
+
+@router.delete("/boarding_details/{boarding_id}", response_model=schemas.BoardingDetail)
+async def delete_boarding_detail(boarding_id: int, db: Session = Depends(database.get_db)):
+    db_boarding_detail = db.query(models.BoardingDetail).filter(models.BoardingDetail.boarding_id == boarding_id).first()
+    if db_boarding_detail is None:
+        raise HTTPException(status_code=404, detail="Boarding detail not found")
+    db.delete(db_boarding_detail)
+    db.commit()
+    return db_boarding_detail
