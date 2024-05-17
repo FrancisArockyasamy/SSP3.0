@@ -1,10 +1,10 @@
-from fastapi import FastAPI, HTTPException, Depends
-from database import SessionLocal, engine
-from models import Base, SMS_Templates, Attendance, Timetable, Exam, Fee_Reminder, Remarks, PTM_Notification, Left_Students, Alumni
-from schemas import SMS_TemplatesCreate,  AttendanceCreate, TimetableCreate, ExamCreate, FeeReminderCreate, RemarksCreate, PTMNotificationCreate, LeftStudentsCreate, AlumniCreate
+from fastapi import FastAPI, HTTPException, Depends, APIRouter
+from .database import SessionLocal, engine
+from .models import Base, SMS_Templates, Attendance, Timetable, Exam, Fee_Reminder, Remarks, PTM_Notification, Left_Students, Alumni
+from .schemas import SMS_TemplatesCreate,  AttendanceCreate, TimetableCreate, ExamCreate, FeeReminderCreate, RemarksCreate, PTMNotificationCreate, LeftStudentsCreate, AlumniCreate
 from sqlalchemy.orm import Session
 
-app = FastAPI()
+app = APIRouter()
 
 Base.metadata.create_all(bind=engine)
 
