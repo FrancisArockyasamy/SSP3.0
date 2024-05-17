@@ -7,17 +7,17 @@ Base = declarative_base()
 
 # Define the Student model
 class Student(Base):
-    __tablename__ = 'students'
+    __tablename__ = 'tbl_students'
 
     student_id = Column(Integer, primary_key=True)
     student_name = Column(String)
     attendance = relationship('Attendance', back_populates='student')
 
 class Attendance(Base):
-    __tablename__ = 'attendance'
+    __tablename__ = 'tbl_attendance'
 
     attendance_id = Column(Integer, primary_key=True)
-    student_id = Column(Integer, ForeignKey('students.student_id'))
+    student_id = Column(Integer, ForeignKey('tbl_students.student_id'))
     attendance_date = Column(Date)
     attendance_status = Column(String)
     attendance_reason = Column(String)

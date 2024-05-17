@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists,create_database
 
-SQLALCHEMY_DATABASE_URL = "postgresql://root:Aero%400031@localhost/lesson_plan"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/lesson_plan"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

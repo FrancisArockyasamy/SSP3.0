@@ -6,14 +6,14 @@ from .database import engine
 Base = declarative_base()
 # Define SQLAlchemy models
 class SubjectChapters(Base):
-    __tablename__ = "subject_chapters"
+    __tablename__ = "tbl_subject_chapters"
 
     id = Column(Integer, primary_key=True, index=True)
     subject_name = Column(String, nullable=False)
     chapter_name = Column(String, nullable=False)
 
 class LessonPlans(Base):
-    __tablename__ = "lesson_plans"
+    __tablename__ = "tbl_lesson_plans"
 
     id = Column(Integer, primary_key=True, index=True)
     chapter_id = Column(Integer, nullable=False)
@@ -24,14 +24,14 @@ class LessonPlans(Base):
     assessments = Column(String, nullable=False)
 
 class ImportedLessonPlans(Base):
-    __tablename__ = "imported_lesson_plans"
+    __tablename__ = "tbl_imported_lesson_plans"
 
     id = Column(Integer, primary_key=True, index=True)
     lesson_plan_id = Column(Integer, nullable=False)
     source_url = Column(String, nullable=False)
 
 class YearPlan(Base):
-    __tablename__ = "year_plan"
+    __tablename__ = "tbl_year_plan"
 
     id = Column(Integer, primary_key=True, index=True)
     year = Column(String, nullable=False)
@@ -39,7 +39,7 @@ class YearPlan(Base):
     status = Column(String, nullable=False)
 
 class WeeklyPlans(Base):
-    __tablename__ = "weekly_plans"
+    __tablename__ = "tbl_weekly_plans"
 
     id = Column(Integer, primary_key=True, index=True)
     year_plan_id = Column(Integer, nullable=False)
@@ -47,14 +47,14 @@ class WeeklyPlans(Base):
     planned_lessons = Column(JSON, nullable=False)
 
 class StaffLessonPlans(Base):
-    __tablename__ = "staff_lesson_plans"
+    __tablename__ = "tbl_staff_lesson_plans"
 
     id = Column(Integer, primary_key=True, index=True)
     lesson_plan_id = Column(Integer, nullable=False)
     staff_id = Column(Integer, nullable=False)
 
 class LessonObservations(Base):
-    __tablename__ = "lesson_observations"
+    __tablename__ = "tbl_lesson_observations"
 
     id = Column(Integer, primary_key=True, index=True)
     observer_id = Column(Integer, nullable=False)
@@ -63,7 +63,7 @@ class LessonObservations(Base):
     questions = Column(String, nullable=False)
 
 class FeedbackAssessments(Base):
-    __tablename__ = "feedback_assessments"
+    __tablename__ = "tbl_feedback_assessments"
 
     id = Column(Integer, primary_key=True, index=True)
     observation_id = Column(Integer, nullable=False)

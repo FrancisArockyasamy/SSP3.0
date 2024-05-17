@@ -58,7 +58,9 @@ app1= APIRouter(
 
 # Module Features APIs
 @app1.post("/module_features/", response_model=List[admin_schema.ModuleFeature])
-def create_module_feature(module_feature: List[admin_schema.ModuleFeatureCreate], db: Session = Depends(get_db)):
+def create_module_feature(module_feature: List[admin_schema.ModuleFeatureCreate], db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     output=[]
     for i in module_feature:
         data= admin_model.ModuleFeature(**i.model_dump())
@@ -69,12 +71,14 @@ def create_module_feature(module_feature: List[admin_schema.ModuleFeatureCreate]
     return output
 
 @app1.get("/module_features/", response_model=list[admin_schema.ModuleFeature])
-def read_module_features(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def read_module_features(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), current_user= Depends(authenticate)):
     data= db.query(admin_model.ModuleFeature).limit(limit).offset(skip).all()
     return data
 
 @app1.put("/module_features/{module_feature_id}")
-def update_module_feature(module_feature_id: int, module_feature: admin_schema.ModuleFeatureCreate, db: Session = Depends(get_db)):
+def update_module_feature(module_feature_id: int, module_feature: admin_schema.ModuleFeatureCreate, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     data= db.query(admin_model.ModuleFeature).filter(admin_model.ModuleFeature.module_feature_id == module_feature_id)
     if not data.first():
         raise HTTPException(status_code=404, detail="Module feature not found")
@@ -83,7 +87,9 @@ def update_module_feature(module_feature_id: int, module_feature: admin_schema.M
     return {"status":True,"message":"Module feature updated successfully"}
     
 @app1.delete("/module_features/{module_feature_id}")
-def delete_module_feature(module_feature_id: int, db: Session = Depends(get_db)):
+def delete_module_feature(module_feature_id: int, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     db_module_feature = db.query(admin_model.ModuleFeature).filter(admin_model.ModuleFeature.module_feature_id == module_feature_id)
     if db_module_feature.first():
         db_module_feature.delete()
@@ -95,7 +101,9 @@ def delete_module_feature(module_feature_id: int, db: Session = Depends(get_db))
 
 # Role APIs
 @app1.post("/roles/", response_model=List[admin_schema.Role])
-def create_role(role: List[admin_schema.RoleCreate], db: Session = Depends(get_db)):
+def create_role(role: List[admin_schema.RoleCreate], db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     output=[]
     for data in role:
         db_role = admin_model.Role(**data.model_dump())
@@ -117,7 +125,9 @@ def read_role(role_id: int, db: Session = Depends(get_db)):
     return db_role
 
 @app1.put("/roles/{role_id}")
-def update_role(role_id: int, role: admin_schema.RoleCreate, db: Session = Depends(get_db)):
+def update_role(role_id: int, role: admin_schema.RoleCreate, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     db_role = db.query(admin_model.Role).filter(admin_model.Role.role_id == role_id)
     if db_role.first():
         db_role.update(role.model_dump())
@@ -127,7 +137,9 @@ def update_role(role_id: int, role: admin_schema.RoleCreate, db: Session = Depen
         raise HTTPException(status_code=404, detail="Role not found")
 
 @app1.delete("/roles/{role_id}")
-def delete_role(role_id: int, db: Session = Depends(get_db)):
+def delete_role(role_id: int, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     db_role = db.query(admin_model.Role).filter(admin_model.Role.role_id == role_id).first()
     if db_role:
         db.delete(db_role)
@@ -138,7 +150,9 @@ def delete_role(role_id: int, db: Session = Depends(get_db)):
     
 # RolePermission APIs
 @app1.post("/role_permissions/", response_model=List[admin_schema.RolePermission])
-def create_role_permissions(roles: List[int], module_features: List[int], db: Session = Depends(get_db)):
+def create_role_permissions(roles: List[int], module_features: List[int], db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     created_role_permissions = []
     for role_id in roles:
         check_role= db.query(admin_model.Role).filter(admin_model.Role.role_id== role_id).first()
@@ -175,7 +189,9 @@ def get_module_features_for_role(role_id: int, db: Session = Depends(get_db)):
     return db_module_features
 
 @app1.delete("/role_permissions/{role_permission_id}")
-def delete_role_permission(role_permission_id: int, db: Session = Depends(get_db)):
+def delete_role_permission(role_permission_id: int, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    if current_user['role_id'] != 1:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized user")
     db_role_permission = db.query(admin_model.RolePermission).filter(admin_model.RolePermission.role_permission_id == role_permission_id).first()
     if db_role_permission:
         db.delete(db_role_permission)
@@ -194,8 +210,9 @@ def create_user(user: admin_schema.UserCreate, db: Session = Depends(get_db)):
     user.password= encrypt_pwd(user.password)
     user_data = admin_model.User(**user.model_dump())
     role= db.query(admin_model.Role).filter(admin_model.Role.role_id == user.role_id).first()
-    school= db.query(admin_model.School).filter(admin_model.School.school_id == user.school_id).first()
-    if role is None or school is None:
+    if user.school_id:
+        school= db.query(admin_model.School).filter(admin_model.School.school_id == user.school_id).first()
+    if role is None or (user.school_id is not None and school is None):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The specified role or school does not exist")
     username= db.query(admin_model.User).filter(admin_model.User.username == user.username).first()
     if username:
@@ -232,8 +249,9 @@ app3=APIRouter(
     tags=["Default values"]
 )
 # DefaultValue APIs
-@app.post("/default_values/", response_model=admin_schema.DefaultValue)
-def create_default_value(default_value: admin_schema.DefaultValueCreate, db: Session = Depends(get_db)):
+@app3.post("/default_values/", response_model=admin_schema.DefaultValue)
+def create_default_value(default_value: admin_schema.DefaultValueCreate, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    default_value.user_id= current_user['user_id']
     db_default_value = admin_model.DefaultValue(**default_value.model_dump())
     db.add(db_default_value)
     db.commit()
@@ -241,17 +259,20 @@ def create_default_value(default_value: admin_schema.DefaultValueCreate, db: Ses
     return db_default_value
 
 # Read DefaultValue by ID
-@app.get("/default_values/{default_id}", response_model=admin_schema.DefaultValue)
-def read_default_value(default_id: int, db: Session = Depends(get_db)):
-    db_default_value = db.query(admin_model.DefaultValue).filter(admin_model.DefaultValue.default_id == default_id).first()
+@app3.get("/default_values", response_model=List[admin_schema.DefaultValue])
+def read_default_value(default_id: int, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+
+    db_default_value = db.query(admin_model.DefaultValue).filter(admin_model.DefaultValue.user_id == current_user['user_id']).all()
     if db_default_value is None:
         raise HTTPException(status_code=404, detail="DefaultValue not found")
     return db_default_value
 
 # Update DefaultValue
-@app.put("/default_values/{default_id}", response_model=admin_schema.DefaultValue)
-def update_default_value(default_id: int, default_value: admin_schema.DefaultValueCreate, db: Session = Depends(get_db)):
-    db_default_value = db.query(admin_model.DefaultValue).filter(admin_model.DefaultValue.default_id == default_id).first()
+@app3.put("/default_values/{default_id}", response_model=admin_schema.DefaultValue)
+def update_default_value(default_id: int, default_value: admin_schema.DefaultValueCreate, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    db_default_value = db.query(admin_model.DefaultValue)\
+        .filter(admin_model.DefaultValue.default_id == default_id,\
+                    admin_model.DefaultValue.user_id == current_user['user_id']).first()
     if db_default_value:
         for key, value in default_value.model_dump().items():
             setattr(db_default_value, key, value)
@@ -262,9 +283,10 @@ def update_default_value(default_id: int, default_value: admin_schema.DefaultVal
         raise HTTPException(status_code=404, detail="DefaultValue not found")
 
 # Delete DefaultValue
-@app.delete("/default_values/{default_id}")
-def delete_default_value(default_id: int, db: Session = Depends(get_db)):
-    db_default_value = db.query(admin_model.DefaultValue).filter(admin_model.DefaultValue.default_id == default_id).first()
+@app3.delete("/default_values/{default_id}")
+def delete_default_value(default_id: int, db: Session = Depends(get_db), current_user= Depends(authenticate)):
+    db_default_value = db.query(admin_model.DefaultValue)\
+        .filter(admin_model.DefaultValue.default_id == default_id,admin_model.DefaultValue.user_id == current_user['user_id']).first()
     if db_default_value:
         db.delete(db_default_value)
         db.commit()
@@ -272,13 +294,13 @@ def delete_default_value(default_id: int, db: Session = Depends(get_db)):
     else:
         raise HTTPException(status_code=404, detail="DefaultValue not found")
 
-app3=APIRouter(
+app4=APIRouter(
     prefix="/admin",
     tags=["Academic years, calender events"]
 )
 
 # Create AcademicYear
-@app3.post("/academic_years/", response_model=admin_schema.AcademicYear)
+@app4.post("/academic_years/", response_model=admin_schema.AcademicYear)
 def create_academic_year(academic_year: admin_schema.AcademicYearCreate, db: Session = Depends(get_db)):
     db_academic_year = admin_model.AcademicYear(**academic_year.dict())
     db.add(db_academic_year)
@@ -287,7 +309,7 @@ def create_academic_year(academic_year: admin_schema.AcademicYearCreate, db: Ses
     return db_academic_year
 
 # Read AcademicYear by ID
-@app3.get("/academic_years/{year_id}", response_model=admin_schema.AcademicYear)
+@app4.get("/academic_years/{year_id}", response_model=admin_schema.AcademicYear)
 def read_academic_year(year_id: int, db: Session = Depends(get_db)):
     db_academic_year = db.query(admin_model.AcademicYear).filter(admin_model.AcademicYear.year_id == year_id).first()
     if db_academic_year is None:
@@ -295,7 +317,7 @@ def read_academic_year(year_id: int, db: Session = Depends(get_db)):
     return db_academic_year
 
 # Update AcademicYear
-@app3.put("/academic_years/{year_id}", response_model=admin_schema.AcademicYear)
+@app4.put("/academic_years/{year_id}", response_model=admin_schema.AcademicYear)
 def update_academic_year(year_id: int, academic_year: admin_schema.AcademicYearCreate, db: Session = Depends(get_db)):
     db_academic_year = db.query(admin_model.AcademicYear).filter(admin_model.AcademicYear.year_id == year_id).first()
     if db_academic_year:
@@ -308,7 +330,7 @@ def update_academic_year(year_id: int, academic_year: admin_schema.AcademicYearC
         raise HTTPException(status_code=404, detail="AcademicYear not found")
 
 # Delete AcademicYear
-@app3.delete("/academic_years/{year_id}")
+@app4.delete("/academic_years/{year_id}")
 def delete_academic_year(year_id: int, db: Session = Depends(get_db)):
     db_academic_year = db.query(admin_model.AcademicYear).filter(admin_model.AcademicYear.year_id == year_id).first()
     if db_academic_year:
@@ -319,7 +341,7 @@ def delete_academic_year(year_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="AcademicYear not found")
     
 # Create SchoolSetting
-@app3.post("/school_settings/", response_model=admin_schema.SchoolSetting)
+@app4.post("/school_settings/", response_model=admin_schema.SchoolSetting)
 def create_school_setting(school_setting: admin_schema.SchoolSettingCreate, db: Session = Depends(get_db)):
     db_school_setting = admin_model.SchoolSetting(**school_setting.dict())
     db.add(db_school_setting)
@@ -328,7 +350,7 @@ def create_school_setting(school_setting: admin_schema.SchoolSettingCreate, db: 
     return db_school_setting
 
 # Read SchoolSetting by ID
-@app3.get("/school_settings/{setting_id}", response_model=admin_schema.SchoolSetting)
+@app4.get("/school_settings/{setting_id}", response_model=admin_schema.SchoolSetting)
 def read_school_setting(setting_id: int, db: Session = Depends(get_db)):
     db_school_setting = db.query(admin_model.SchoolSetting).filter(admin_model.SchoolSetting.setting_id == setting_id).first()
     if db_school_setting is None:
@@ -336,7 +358,7 @@ def read_school_setting(setting_id: int, db: Session = Depends(get_db)):
     return db_school_setting
 
 # Update SchoolSetting
-@app3.put("/school_settings/{setting_id}", response_model=admin_schema.SchoolSetting)
+@app4.put("/school_settings/{setting_id}", response_model=admin_schema.SchoolSetting)
 def update_school_setting(setting_id: int, school_setting: admin_schema.SchoolSettingCreate, db: Session = Depends(get_db)):
     db_school_setting = db.query(admin_model.SchoolSetting).filter(admin_model.SchoolSetting.setting_id == setting_id).first()
     if db_school_setting:
@@ -349,7 +371,7 @@ def update_school_setting(setting_id: int, school_setting: admin_schema.SchoolSe
         raise HTTPException(status_code=404, detail="SchoolSetting not found")
 
 # Delete SchoolSetting
-@app3.delete("/school_settings/{setting_id}")
+@app4.delete("/school_settings/{setting_id}")
 def delete_school_setting(setting_id: int, db: Session = Depends(get_db)):
     db_school_setting = db.query(admin_model.SchoolSetting).filter(admin_model.SchoolSetting.setting_id == setting_id).first()
     if db_school_setting:
@@ -360,7 +382,7 @@ def delete_school_setting(setting_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="SchoolSetting not found")
 
 # Create CalendarEvent
-@app3.post("/calendar_events/", response_model=admin_schema.CalendarEvent)
+@app4.post("/calendar_events/", response_model=admin_schema.CalendarEvent)
 def create_calendar_event(calendar_event: admin_schema.CalendarEventCreate, db: Session = Depends(get_db)):
     db_calendar_event = admin_model.CalendarEvent(**calendar_event.dict())
     db.add(db_calendar_event)
@@ -369,7 +391,7 @@ def create_calendar_event(calendar_event: admin_schema.CalendarEventCreate, db: 
     return db_calendar_event
 
 # Read CalendarEvent by ID
-@app3.get("/calendar_events/{event_id}", response_model=admin_schema.CalendarEvent)
+@app4.get("/calendar_events/{event_id}", response_model=admin_schema.CalendarEvent)
 def read_calendar_event(event_id: int, db: Session = Depends(get_db)):
     db_calendar_event = db.query(admin_model.CalendarEvent).filter(admin_model.CalendarEvent.event_id == event_id).first()
     if db_calendar_event is None:
@@ -377,7 +399,7 @@ def read_calendar_event(event_id: int, db: Session = Depends(get_db)):
     return db_calendar_event
 
 # Update CalendarEvent
-@app3.put("/calendar_events/{event_id}", response_model=admin_schema.CalendarEvent)
+@app4.put("/calendar_events/{event_id}", response_model=admin_schema.CalendarEvent)
 def update_calendar_event(event_id: int, calendar_event: admin_schema.CalendarEventCreate, db: Session = Depends(get_db)):
     db_calendar_event = db.query(admin_model.CalendarEvent).filter(admin_model.CalendarEvent.event_id == event_id).first()
     if db_calendar_event:
@@ -390,7 +412,7 @@ def update_calendar_event(event_id: int, calendar_event: admin_schema.CalendarEv
         raise HTTPException(status_code=404, detail="CalendarEvent not found")
 
 # Delete CalendarEvent
-@app3.delete("/calendar_events/{event_id}")
+@app4.delete("/calendar_events/{event_id}")
 def delete_calendar_event(event_id: int, db: Session = Depends(get_db)):
     db_calendar_event = db.query(admin_model.CalendarEvent).filter(admin_model.CalendarEvent.event_id == event_id).first()
     if db_calendar_event:

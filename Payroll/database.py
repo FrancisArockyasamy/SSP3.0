@@ -6,7 +6,7 @@ import os
 from sqlalchemy_utils import database_exists, create_database
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL_PAYROLL")
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 

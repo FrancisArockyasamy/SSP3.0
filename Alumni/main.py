@@ -11,20 +11,20 @@ from typing import List
 from sqlalchemy_utils import database_exists, create_database
 
 # PostgreSQL database connection
-DATABASE_URL = "postgresql://root:Aero%400031@localhost/alumni"
+DATABASE_URL = "postgresql://postgres:postgres@localhost/alumni"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # SQLAlchemy models
 class AcademicYear(Base):
-    __tablename__ = "academic_year"
+    __tablename__ = "tbl_academic_year"
 
     academic_year_id = Column(Integer, primary_key=True, index=True)
     academic_year = Column(Integer, nullable=False)
 
 class Alumni(Base):
-    __tablename__ = "alumni"
+    __tablename__ = "tbl_alumni"
 
     alumni_id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, nullable=False)
@@ -37,11 +37,11 @@ class Alumni(Base):
     academic_years = relationship("AlumniAcademic", back_populates="alumni")
 
 class AlumniAcademic(Base):
-    __tablename__ = "alumni_academic"
+    __tablename__ = "tbl_alumni_academic"
 
     alumni_academic_id = Column(Integer, primary_key=True, index=True)
-    alumni_id = Column(Integer, ForeignKey("alumni.alumni_id"))
-    academic_year_id = Column(Integer, ForeignKey("academic_year.academic_year_id"))
+    alumni_id = Column(Integer, ForeignKey("tbl_alumni.alumni_id"))
+    academic_year_id = Column(Integer, ForeignKey("tbl_academic_year.academic_year_id"))
 
     alumni = relationship("Alumni", back_populates="academic_years")
     academic_year = relationship("AcademicYear")

@@ -9,7 +9,7 @@ from typing import Optional
 # Define your SQLAlchemy models here
 
 class Employee(Base):
-    __tablename__ = "employees"
+    __tablename__ = "tbl_employees"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
@@ -17,7 +17,7 @@ class Employee(Base):
 
 
 class Attendance(Base):
-    __tablename__ = "attendances"
+    __tablename__ = "tbl_attendances"
 
     id = Column(Integer, primary_key=True, index=True)
     employee_id = Column(Integer, index=True)
@@ -31,7 +31,7 @@ class Attendance(Base):
 
 
 class LeaveType(Base):
-    __tablename__ = "leave_types"
+    __tablename__ = "tbl_leave_types"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
@@ -40,7 +40,7 @@ class LeaveType(Base):
 
 
 class LeaveRegister(Base):
-    __tablename__ = "leave_registers"
+    __tablename__ = "tbl_leave_registers"
 
     id = Column(Integer, primary_key=True, index=True)
     employee_id = Column(Integer, index=True)
@@ -52,7 +52,7 @@ class LeaveRegister(Base):
 
 
 class LateAttendance(Base):
-    __tablename__ = "late_attendances"
+    __tablename__ = "tbl_late_attendances"
 
     id = Column(Integer, primary_key=True, index=True)
     employee_id = Column(Integer, index=True)
@@ -62,7 +62,7 @@ class LateAttendance(Base):
 
 
 class OnDutyRegister(Base):
-    __tablename__ = "on_duty_registers"
+    __tablename__ = "tbl_on_duty_registers"
 
     id = Column(Integer, primary_key=True, index=True)
     employee_id = Column(Integer, index=True)
@@ -72,7 +72,7 @@ class OnDutyRegister(Base):
 
 
 class PermissionRegister(Base):
-    __tablename__ = "permission_registers"
+    __tablename__ = "tbl_permission_registers"
 
     id = Column(Integer, primary_key=True, index=True)
     employee_id = Column(Integer, index=True)
@@ -83,7 +83,7 @@ class PermissionRegister(Base):
 
 
 class MonthlyAttendanceReport(Base):
-    __tablename__ = "monthly_attendance_reports"
+    __tablename__ = "tbl_monthly_attendance_reports"
 
     id = Column(Integer, primary_key=True, index=True)
     employee_id = Column(Integer, index=True)

@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy_utils import create_database, database_exists
 
 # SQLAlchemy database setup
-SQLALCHEMY_DATABASE_URL = "postgresql://root:Aero%400031@localhost/inventory"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/inventory"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

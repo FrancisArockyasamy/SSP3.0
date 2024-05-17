@@ -4,7 +4,9 @@ from . import attendance
 
 
 # Create FastAPI app instance
-app = APIRouter()
+app = APIRouter(
+    tags=["Attendance"]
+)
 
 # Include routers
 app.include_router(attendance.router)

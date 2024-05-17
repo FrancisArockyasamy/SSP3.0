@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 class SMS_Templates(Base):
-    __tablename__ = "sms_templates"
+    __tablename__ = "tbl_sms_templates"
 
     template_id = Column(Integer, primary_key=True)
     template_name = Column(String, unique=True)
@@ -14,12 +14,12 @@ class SMS_Templates(Base):
 
 
 class SMS_Messages(Base):
-    __tablename__ = "sms_messages"
+    __tablename__ = "tbl_sms_messages"
 
     message_id = Column(Integer, primary_key=True, index=True)
-    template_id = Column(Integer, ForeignKey("sms_templates.template_id"))
-    sender_id = Column(Integer, ForeignKey("users.user_id"))
-    recipient_id = Column(Integer, ForeignKey("users.user_id"))
+    template_id = Column(Integer, ForeignKey("tbl_sms_templates.template_id"))
+    sender_id = Column(Integer, ForeignKey("tbl_users.user_id"))
+    recipient_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     message_content = Column(String)
     timestamp = Column(String)
     delivery_status = Column(String)
@@ -29,7 +29,7 @@ class SMS_Messages(Base):
     recipient = relationship("Users", foreign_keys=[recipient_id])
 
 class Users(Base):
-    __tablename__ = "users"
+    __tablename__ = "tbl_users"
 
     user_id = Column(Integer, primary_key=True, index=True)
     user_type = Column(String)
@@ -51,7 +51,7 @@ class Users(Base):
     alumni = relationship("Alumni")
 
 class Groups(Base):
-    __tablename__ = "groups"
+    __tablename__ = "tbl_groups"
 
     group_id = Column(Integer, primary_key=True, index=True)
     group_name = Column(String)
@@ -60,16 +60,16 @@ class Groups(Base):
     members = relationship("Users", secondary="user_groups")
 
 class User_Groups(Base):
-    __tablename__ = "user_groups"
+    __tablename__ = "tbl_user_groups"
 
-    user_id = Column(Integer, ForeignKey("users.user_id"), primary_key=True)
-    group_id = Column(Integer, ForeignKey("groups.group_id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"), primary_key=True)
+    group_id = Column(Integer, ForeignKey("tbl_groups.group_id"), primary_key=True)
 
 class Notifications(Base):
-    __tablename__ = "notifications"
+    __tablename__ = "tbl_notifications"
 
     notification_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     notification_type = Column(String)
     notification_content = Column(String)
     timestamp = Column(String)
@@ -77,10 +77,10 @@ class Notifications(Base):
     user = relationship("Users")
 
 class Homework(Base):
-    __tablename__ = "homework"
+    __tablename__ = "tbl_homework"
 
     homework_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     homework_type = Column(String)
     homework_content = Column(String)
     deadline = Column(Date)
@@ -88,20 +88,20 @@ class Homework(Base):
     user = relationship("Users")
 
 class Attendance(Base):
-    __tablename__ = "attendance"
+    __tablename__ = "tbl_attendance"
 
     attendance_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     date = Column(Date)
     status = Column(String)
 
     user = relationship("Users")
 
 class Timetable(Base):
-    __tablename__ = "timetable"
+    __tablename__ = "tbl_timetable"
 
     timetable_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     day = Column(String)
     time = Column(String)
     subject = Column(String)
@@ -109,60 +109,60 @@ class Timetable(Base):
     user = relationship("Users")
 
 class Exam(Base):
-    __tablename__ = "exam"
+    __tablename__ = "tbl_exam"
 
     exam_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     subject = Column(String)
     portion = Column(String)
     result = Column(String)
 
     user = relationship("Users")
 
-class Fee_Reminder(Base):
-    __tablename__ = "fee_reminder"
+class FeeReminder(Base):
+    __tablename__ = "tbl_fee_reminder"
 
     reminder_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     amount = Column(Integer)
     due_date = Column(Date)
 
     user = relationship("Users")
 
 class Remarks(Base):
-    __tablename__ = "remarks"
+    __tablename__ = "tbl_remarks"
 
     remark_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     subject = Column(String)
     remark_content = Column(String)
 
     user = relationship("Users")
 
-class PTM_Notification(Base):
-    __tablename__ = "ptm_notification"
+class PTMNotification(Base):
+    __tablename__ = "tbl_ptm_notification"
 
     ptm_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     date = Column(Date)
     notification_content = Column(String)
 
     user = relationship("Users")
 
-class Left_Students(Base):
-    __tablename__ = "left_students"
+class LeftStudents(Base):
+    __tablename__ = "tbl_left_students"
 
     left_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     reason = Column(String)
 
     user = relationship("Users")
 
 class Alumni(Base):
-    __tablename__ = "alumni"
+    __tablename__ = "tbl_alumni"
 
     alumni_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"))
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id"))
     graduation_year = Column(Integer)
     last_contact_date = Column(Date)
 

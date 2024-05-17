@@ -1,15 +1,18 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
+from sqlalchemy_utils import create_database, database_exists
 
 # FastAPI app instance
-app = FastAPI()
+app = APIRouter()
 
 # SQLAlchemy database setup
-SQLALCHEMY_DATABASE_URL = "postgresql://root:root@localhost/idcard"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/idcard"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
+if not database_exists(engine.url):
+    create_database(engine.url)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -44,7 +47,7 @@ class IDCard(IDCardBase):
 
 # SQLAlchemy models
 class Template(Base):
-    __tablename__ = "template"
+    __tablename__ = "tbl_template"
 
     template_id = Column(Integer, primary_key=True, index=True)
     template_name = Column(String, index=True)
@@ -52,14 +55,14 @@ class Template(Base):
     id_cards = relationship("IDCard", back_populates="template")
 
 class IDCard(Base):
-    __tablename__ = "id_card"
+    __tablename__ = "tbl_id_card"
 
     id_card_id = Column(Integer, primary_key=True, index=True)
     orientation = Column(String, index=True)
     background_image = Column(String)
     num_student_copies = Column(Integer)
     num_staff_copies = Column(Integer)
-    template_id = Column(Integer, ForeignKey("template.template_id"))
+    template_id = Column(Integer, ForeignKey("tbl_template.template_id"))
 
     template = relationship("Template", back_populates="id_cards")
 

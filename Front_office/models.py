@@ -6,7 +6,7 @@ from .database import engine
 Base = declarative_base()
 
 class Visitor(Base):
-    __tablename__ = 'visitors'
+    __tablename__ = 'tbl_visitors'
     
     visitor_id = Column(Integer, primary_key=True)
     name = Column(String(255))
@@ -17,7 +17,7 @@ class Visitor(Base):
     check_out_time = Column(DateTime)
 
 class Package(Base):
-    __tablename__ = 'packages'
+    __tablename__ = 'tbl_packages'
     
     package_id = Column(Integer, primary_key=True)
     sender_name = Column(String(255))
@@ -29,7 +29,7 @@ class Package(Base):
     delivered_at = Column(DateTime)
 
 class Call(Base):
-    __tablename__ = 'calls'
+    __tablename__ = 'tbl_calls'
     
     call_id = Column(Integer, primary_key=True)
     caller_name = Column(String(255))
@@ -41,17 +41,17 @@ class Call(Base):
     call_time = Column(DateTime)
 
 class GatePass(Base):
-    __tablename__ = 'gate_passes'
+    __tablename__ = 'tbl_gate_passes'
     
     gate_pass_id = Column(Integer, primary_key=True)
-    visitor_id = Column(Integer, ForeignKey('visitors.visitor_id'))
-    staff_member_id = Column(Integer, ForeignKey('staff_members.staff_member_id'))
+    visitor_id = Column(Integer, ForeignKey('tbl_visitors.visitor_id'))
+    staff_member_id = Column(Integer, ForeignKey('tbl_staff_members.staff_member_id'))
     purpose = Column(String(255))
     issued_at = Column(DateTime)
     valid_until = Column(DateTime)
 
 class StaffMember(Base):
-    __tablename__ = 'staff_members'
+    __tablename__ = 'tbl_staff_members'
     
     staff_member_id = Column(Integer, primary_key=True)
     name = Column(String(255))
@@ -61,7 +61,7 @@ class StaffMember(Base):
     gate_passes = relationship("GatePass")
 
 class Circular(Base):
-    __tablename__ = 'circulars'
+    __tablename__ = 'tbl_circulars'
     
     circular_id = Column(Integer, primary_key=True)
     title = Column(String(255))
@@ -70,11 +70,11 @@ class Circular(Base):
     date_published = Column(DateTime)
 
 class Complaint(Base):
-    __tablename__ = 'complaints'
+    __tablename__ = 'tbl_complaints'
     
     complaint_id = Column(Integer, primary_key=True)
-    visitor_id = Column(Integer, ForeignKey('visitors.visitor_id'))
-    staff_member_id = Column(Integer, ForeignKey('staff_members.staff_member_id'))
+    visitor_id = Column(Integer, ForeignKey('tbl_visitors.visitor_id'))
+    staff_member_id = Column(Integer, ForeignKey('tbl_staff_members.staff_member_id'))
     complaint_type = Column(String(255))
     description = Column(String(255))
     status = Column(String(255))

@@ -6,7 +6,7 @@ from .database import Base, engine
 Base = declarative_base()
 
 class Student(Base):
-    __tablename__ = "students"
+    __tablename__ = "tbl_students"
 
     student_id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, nullable=False)
@@ -16,7 +16,7 @@ class Student(Base):
     email = Column(String, nullable=False, unique=True)
     phone_number = Column(String, nullable=False)
     address = Column(String)
-    class_id = Column(Integer, ForeignKey("classes.class_id"))
+    class_id = Column(Integer, ForeignKey("tbl_classes.class_id"))
 
     classes = relationship("Class", back_populates="students")
     grades = relationship("Grade", back_populates="student")
@@ -28,11 +28,11 @@ class Student(Base):
 
 
 class Class(Base):
-    __tablename__ = "classes"
+    __tablename__ = "tbl_classes"
 
     class_id = Column(Integer, primary_key=True, index=True)
     class_name = Column(String, nullable=False, unique=True)
-    class_teacher_id = Column(Integer, ForeignKey("teachers.teacher_id"))
+    class_teacher_id = Column(Integer, ForeignKey("tbl_teachers.teacher_id"))
 
     teacher = relationship("Teacher", back_populates="classes")
     students = relationship("Student", back_populates="classes")
@@ -41,7 +41,7 @@ class Class(Base):
 
 
 class Teacher(Base):
-    __tablename__ = "teachers"
+    __tablename__ = "tbl_teachers"
 
     teacher_id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, nullable=False)
@@ -53,7 +53,7 @@ class Teacher(Base):
 
 
 class Subject(Base):
-    __tablename__ = "subjects"
+    __tablename__ = "tbl_subjects"
 
     subject_id = Column(Integer, primary_key=True, index=True)
     subject_name = Column(String, nullable=False, unique=True)
@@ -62,22 +62,22 @@ class Subject(Base):
 
 
 class Grade(Base):
-    __tablename__ = "grades"
+    __tablename__ = "tbl_grades"
 
     grade_id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.student_id"))
-    subject_id = Column(Integer, ForeignKey("subjects.subject_id"))
+    student_id = Column(Integer, ForeignKey("tbl_students.student_id"))
+    subject_id = Column(Integer, ForeignKey("tbl_subjects.subject_id"))
     grade_value = Column(Float)
 
     student = relationship("Student", back_populates="grades")
     subject = relationship("Subject", back_populates="grades")
     progress_cards = relationship("ProgressCard", back_populates="grade")  
 class Attendance(Base):
-    __tablename__ = "attendance"
+    __tablename__ = "tbl_attendance"
 
     attendance_id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.student_id"))
-    class_id = Column(Integer, ForeignKey("classes.class_id"))
+    student_id = Column(Integer, ForeignKey("tbl_students.student_id"))
+    class_id = Column(Integer, ForeignKey("tbl_classes.class_id"))
     date = Column(Date)
     status = Column(String)
 
@@ -86,11 +86,11 @@ class Attendance(Base):
 
 
 class Homework(Base):
-    __tablename__ = "homework"
+    __tablename__ = "tbl_homework"
 
     homework_id = Column(Integer, primary_key=True, index=True)
-    class_id = Column(Integer, ForeignKey("classes.class_id"))
-    subject_id = Column(Integer, ForeignKey("subjects.subject_id"))
+    class_id = Column(Integer, ForeignKey("tbl_classes.class_id"))
+    subject_id = Column(Integer, ForeignKey("tbl_subjects.subject_id"))
     deadline = Column(Date)
     assignment_details = Column(Text)
     submission_status = Column(String)
@@ -100,10 +100,10 @@ class Homework(Base):
 
 
 class Remark(Base):
-    __tablename__ = "remarks"
+    __tablename__ = "tbl_remarks"
 
     remark_id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.student_id"))
+    student_id = Column(Integer, ForeignKey("tbl_students.student_id"))
     remarks_details = Column(Text)
     remark_date = Column(Date)
 
@@ -111,10 +111,10 @@ class Remark(Base):
 
 
 class SMSUsage(Base):
-    __tablename__ = "sms_usage"
+    __tablename__ = "tbl_sms_usage"
 
     sms_usage_id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.student_id"))
+    student_id = Column(Integer, ForeignKey("tbl_students.student_id"))
     messages_sent = Column(Integer)
     remaining_credits = Column(Integer)
 
@@ -122,23 +122,23 @@ class SMSUsage(Base):
 
 
 class ProgressCard(Base):
-    __tablename__ = "progress_cards"
+    __tablename__ = "tbl_progress_cards"
 
     progress_card_id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.student_id"))
+    student_id = Column(Integer, ForeignKey("tbl_students.student_id"))
     term = Column(String)
     academic_year = Column(String)
-    grade_id = Column(Integer, ForeignKey("grades.grade_id"))
+    grade_id = Column(Integer, ForeignKey("tbl_grades.grade_id"))
 
     student = relationship("Student", back_populates="progress_cards")
     grade = relationship("Grade", back_populates="progress_cards")
 
 
 class FeePayment(Base):
-    __tablename__ = "fee_payments"
+    __tablename__ = "tbl_fee_payments"
 
     payment_id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("students.student_id"))
+    student_id = Column(Integer, ForeignKey("tbl_students.student_id"))
     payment_date = Column(Date)
     amount = Column(Float)
     payment_method = Column(String)

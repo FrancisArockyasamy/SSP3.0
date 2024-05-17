@@ -1,5 +1,9 @@
 from fastapi import APIRouter
 from .APIs import admin
+from .models.admin import Base
+from .settings.db import engine
+
+Base.metadata.create_all(bind=engine)
 
 app = APIRouter(
 )

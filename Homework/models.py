@@ -6,7 +6,7 @@ from .database import engine
 Base = declarative_base()
 
 class Teacher(Base):
-    __tablename__ = "teachers"
+    __tablename__ = "tbl_teachers"
 
     TeacherID = Column(Integer, primary_key=True)
     FirstName = Column(String(50))
@@ -16,7 +16,7 @@ class Teacher(Base):
     assignments = relationship("HomeworkAssignment", back_populates="teacher")
 
 class Student(Base):
-    __tablename__ = "students"
+    __tablename__ = "tbl_students"
 
     StudentID = Column(Integer, primary_key=True)
     FirstName = Column(String(50))
@@ -27,18 +27,18 @@ class Student(Base):
     grades = relationship("Grade", back_populates="student")
 
 class Subject(Base):
-    __tablename__ = "subjects"
+    __tablename__ = "tbl_subjects"
 
     SubjectID = Column(Integer, primary_key=True)
     SubjectName = Column(String(100))
     assignments = relationship("HomeworkAssignment", back_populates="subject")
 
 class HomeworkAssignment(Base):
-    __tablename__ = "homework_assignments"
+    __tablename__ = "tbl_homework_assignments"
 
     AssignmentID = Column(Integer, primary_key=True)
-    TeacherID = Column(Integer, ForeignKey("teachers.TeacherID"))
-    SubjectID = Column(Integer, ForeignKey("subjects.SubjectID"))
+    TeacherID = Column(Integer, ForeignKey("tbl_teachers.TeacherID"))
+    SubjectID = Column(Integer, ForeignKey("tbl_subjects.SubjectID"))
     DueDate = Column(Date)
     Description = Column(Text)
     AdditionalInstructions = Column(Text)
@@ -48,11 +48,11 @@ class HomeworkAssignment(Base):
     submissions = relationship("HomeworkSubmission", back_populates="assignment")
 
 class HomeworkSubmission(Base):
-    __tablename__ = "homework_submissions"
+    __tablename__ = "tbl_homework_submissions"
 
     SubmissionID = Column(Integer, primary_key=True)
-    StudentID = Column(Integer, ForeignKey("students.StudentID"))
-    AssignmentID = Column(Integer, ForeignKey("homework_assignments.AssignmentID"))
+    StudentID = Column(Integer, ForeignKey("tbl_students.StudentID"))
+    AssignmentID = Column(Integer, ForeignKey("tbl_homework_assignments.AssignmentID"))
     SubmissionDate = Column(Date)
     Status = Column(String(50))
     SubmittedAttachments = Column(Text)
@@ -61,11 +61,11 @@ class HomeworkSubmission(Base):
     grades = relationship("Grade", back_populates="submission")
 
 class Grade(Base):
-    __tablename__ = "grades"
+    __tablename__ = "tbl_grades"
 
     GradeID = Column(Integer, primary_key=True)
-    AssignmentID = Column(Integer, ForeignKey("homework_assignments.AssignmentID"))
-    StudentID = Column(Integer, ForeignKey("students.StudentID"))
+    AssignmentID = Column(Integer, ForeignKey("tbl_homework_assignments.AssignmentID"))
+    StudentID = Column(Integer, ForeignKey("tbl_students.StudentID"))
     Grade = Column(DECIMAL(5, 2))
     Feedback = Column(Text)
     student = relationship("Student", back_populates="grades")

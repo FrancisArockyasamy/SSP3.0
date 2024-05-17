@@ -1,11 +1,11 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from .database import engine
 from . import models
 from .routers import users, students, marks, examinations, classType
 
 # models.Base.metadata.drop_all(bind=engine)
 
-app = FastAPI()
+app = APIRouter()
 
 app.include_router(users.router)
 app.include_router(students.router)

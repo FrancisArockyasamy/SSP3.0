@@ -1,12 +1,14 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import models, schemas, database
-from database import get_db, engine
-from models import Base
+from .import models, schemas
+from .database import get_db, engine
+from .models import Base
 
 Base.metadata.create_all(bind= engine)
 
-app = FastAPI(docs_url="/Anto")
+app = APIRouter(
+    tags=["Payroll"]
+)
 
 # Dependency for getting the database session
 

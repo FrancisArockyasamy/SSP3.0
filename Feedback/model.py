@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'tbl_users'
 
     user_id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), nullable=False)
@@ -19,12 +19,12 @@ class User(Base):
     responses = relationship("Response", back_populates="user")
 
 class FeedbackForm(Base):
-    __tablename__ = 'feedback_forms'
+    __tablename__ = 'tbl_feedback_forms'
 
     form_id = Column(Integer, primary_key=True, index=True)
     title = Column(String(100), nullable=False)
     description = Column(Text)
-    created_by = Column(Integer, ForeignKey('users.user_id'))
+    created_by = Column(Integer, ForeignKey('tbl_users.user_id'))
     created_at = Column(DateTime, server_default="now()")
 
     creator = relationship("User", back_populates="feedback_forms")
@@ -33,10 +33,10 @@ class FeedbackForm(Base):
     sessions = relationship("FeedbackSession", back_populates="form")
 
 class Question(Base):
-    __tablename__ = 'questions'
+    __tablename__ = 'tbl_questions'
 
     question_id = Column(Integer, primary_key=True, index=True)
-    form_id = Column(Integer, ForeignKey('feedback_forms.form_id'))
+    form_id = Column(Integer, ForeignKey('tbl_feedback_forms.form_id'))
     question_text = Column(Text, nullable=False)
     question_type = Column(String(20), nullable=False)
     order = Column(Integer, nullable=False)
@@ -45,28 +45,28 @@ class Question(Base):
     options = relationship("QuestionOption", back_populates="question")
 
 class QuestionOption(Base):
-    __tablename__ = 'question_options'
+    __tablename__ = 'tbl_question_options'
 
     option_id = Column(Integer, primary_key=True, index=True)
-    question_id = Column(Integer, ForeignKey('questions.question_id'))
+    question_id = Column(Integer, ForeignKey('tbl_questions.question_id'))
     option_text = Column(String(100), nullable=False)
 
     question = relationship("Question", back_populates="options")
 
 class Objective(Base):
-    __tablename__ = 'objectives'
+    __tablename__ = 'tbl_objectives'
 
     objective_id = Column(Integer, primary_key=True, index=True)
-    form_id = Column(Integer, ForeignKey('feedback_forms.form_id'))
+    form_id = Column(Integer, ForeignKey('tbl_feedback_forms.form_id'))
     objective_text = Column(Text, nullable=False)
 
     form = relationship("FeedbackForm", back_populates="objectives")
 
 class FeedbackSession(Base):
-    __tablename__ = 'feedback_sessions'
+    __tablename__ = 'tbl_feedback_sessions'
 
     session_id = Column(Integer, primary_key=True, index=True)
-    form_id = Column(Integer, ForeignKey('feedback_forms.form_id'))
+    form_id = Column(Integer, ForeignKey('tbl_feedback_forms.form_id'))
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
 
@@ -74,11 +74,11 @@ class FeedbackSession(Base):
     responses = relationship("Response", back_populates="session")
 
 class Response(Base):
-    __tablename__ = 'responses'
+    __tablename__ = 'tbl_responses'
 
     response_id = Column(Integer, primary_key=True, index=True)
-    session_id = Column(Integer, ForeignKey('feedback_sessions.session_id'))
-    user_id = Column(Integer, ForeignKey('users.user_id'))
+    session_id = Column(Integer, ForeignKey('tbl_feedback_sessions.session_id'))
+    user_id = Column(Integer, ForeignKey('tbl_users.user_id'))
     submitted_at = Column(DateTime, server_default="now()")
 
     session = relationship("FeedbackSession", back_populates="responses")
@@ -86,11 +86,11 @@ class Response(Base):
     answers = relationship("Answer", back_populates="response")
 
 class Answer(Base):
-    __tablename__ = 'answers'
+    __tablename__ = 'tbl_answers'
 
     answer_id = Column(Integer, primary_key=True, index=True)
-    response_id = Column(Integer, ForeignKey('responses.response_id'))
-    question_id = Column(Integer, ForeignKey('questions.question_id'))
+    response_id = Column(Integer, ForeignKey('tbl_responses.response_id'))
+    question_id = Column(Integer, ForeignKey('tbl_questions.question_id'))
     answer_text = Column(Text)
 
     response = relationship("Response", back_populates="answers")

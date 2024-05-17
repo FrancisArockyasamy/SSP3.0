@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import database_exists, create_database
 
 # Database connection
-SQLALCHEMY_DATABASE_URL = "postgresql://root:Aero%400031@localhost/student_portal"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/student_portal"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

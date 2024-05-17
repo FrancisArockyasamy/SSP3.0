@@ -10,7 +10,7 @@ class SchoolBase(BaseModel):
     state: str
     country: str
     postal_code: int
-    phone_number: str
+    phone_number: int
     email: EmailStr
 
 class SchoolCreate(SchoolBase):
@@ -30,14 +30,14 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
     role_id: int
-    school_id: int
+    school_id: Optional[int]= None
     is_active:bool
 
 class User(UserBase):
     user_id: int
     is_active: bool
     role_id: int
-    school_id: int
+    school_id: Optional[int]=None
 
     class Config:
         from_attributes = True
@@ -81,7 +81,7 @@ class RolePermission(BaseModel):
 
 # Default values
 class DefaultValueBase(BaseModel):
-    user_id: int
+    user_id: int=None
     module_name: str
     default_setting: str
 
