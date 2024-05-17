@@ -22,7 +22,7 @@ async def create_sms_template(template: SMS_TemplatesCreate, db: Session = Depen
     db.add(db_template)
     db.commit()
     db.refresh(db_template)
-    return db_template
+    return template
 
 @app.get("/get_sms_template/{template_id}")
 async def get_sms_template(template_id: int, db: Session = Depends(get_db)):

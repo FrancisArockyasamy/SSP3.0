@@ -7,8 +7,8 @@ Base = declarative_base()
 class SMS_Templates(Base):
     __tablename__ = "sms_templates"
 
-    template_id = Column(Integer, primary_key=True, index=True)
-    template_name = Column(String, unique=True, index=True)
+    template_id = Column(Integer, primary_key=True)
+    template_name = Column(String, unique=True)
     template_content = Column(String)
     template_type = Column(String)
 
@@ -24,7 +24,7 @@ class SMS_Messages(Base):
     timestamp = Column(String)
     delivery_status = Column(String)
 
-    template = relationship("SMS_Templates", back_populates="messages")
+    template = relationship("SMS_Templates")
     sender = relationship("Users", foreign_keys=[sender_id])
     recipient = relationship("Users", foreign_keys=[recipient_id])
 
