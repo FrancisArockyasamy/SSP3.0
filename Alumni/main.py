@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, UploadFile, File
+from fastapi import FastAPI, HTTPException, Depends, UploadFile, File, APIRouter
 from pydantic import BaseModel
 from sqlalchemy import create_engine,Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
@@ -11,7 +11,7 @@ from typing import List
 from sqlalchemy_utils import database_exists, create_database
 
 # PostgreSQL database connection
-DATABASE_URL = "postgresql://root:Aero%400031@localhost/alumni1"
+DATABASE_URL = "postgresql://root:Aero%400031@localhost/alumni"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -88,8 +88,10 @@ class AlumniBulkCreate(BaseModel):
 Base.metadata.create_all(bind=engine)
 
 # FastAPI instance
-app = FastAPI()
-
+app= APIRouter(
+    prefix="/alumni",
+    tags=["Alumni"]
+)
 # Dependency to get the database session
 def get_db():
     db = SessionLocal()

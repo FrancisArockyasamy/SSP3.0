@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from database import Base, engine # Assuming Base is defined in database.py
+from .database import Base, engine # Assuming Base is defined in database.py
 
 class Category(Base):
     __tablename__ = "categories"

@@ -1,18 +1,20 @@
 # main.py
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 from typing import List
-from models import *
-from schemas import *
-import database
+from .models import *
+from .schemas import *
+from .database import *
 from datetime import datetime
 
-app = FastAPI()
-
+app= APIRouter(
+    prefix="/lessonPlan",
+    tags=["Lesson Plan"]
+)
 # Dependency for getting database session
 def get_db():
-    db = database.SessionLocal()
+    db = SessionLocal()
     try:
         yield db
     finally:
