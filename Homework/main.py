@@ -3,7 +3,10 @@ from sqlalchemy.orm import Session
 from . import models, database
 from .schemas import HomeworkAssignmentCreate, GradeCreate, HomeworkSubmission  # Import the required classes from schemas
 
-app = APIRouter()
+app = APIRouter(
+     prefix="/homework",
+    tags=["Homework"]
+)
 
 # Dependency to get the database session
 def get_db():

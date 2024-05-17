@@ -8,7 +8,8 @@ import stripe
 
 stripe.api_key = "your_stripe_api_key"  # Set your Stripe API key here
 
-app = APIRouter()
+app = APIRouter( prefix="/fee",
+    tags=["Fee"])
 
 # Dependency to get database session
 def get_db():

@@ -40,6 +40,12 @@ class TeacherBase(BaseModel):
 class TeacherCreate(TeacherBase):
     pass
 
+class TeacherResponse(BaseModel):
+    TeacherID:int
+    TeacherName: str
+    Department: Optional[str]
+    ContactInfo: Optional[str]
+
 class ClassBase(BaseModel):
     ClassName: str
     Section: str
@@ -47,6 +53,11 @@ class ClassBase(BaseModel):
 
 class ClassCreate(ClassBase):
     pass
+
+class ClassResponse(BaseModel):
+    ClassName: str
+    Section: str
+    ShiftID: int
 
 class TimetableBase(BaseModel):
     ClassID: int
@@ -58,3 +69,12 @@ class TimetableBase(BaseModel):
 
 class TimetableCreate(TimetableBase):
     pass
+
+class TimetableResponse(BaseModel):
+    TimetableID:int
+    SubjectID: int
+    TeacherID: int
+    DayOfWeek: str
+    PeriodNumber: int
+    RoomNumber: str
+    ClassID: int

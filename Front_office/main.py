@@ -2,7 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import models, database, schema
 
-app = APIRouter()
+app = APIRouter(
+     prefix="/front_office",
+    tags=["Front_office"]
+)
 
 # Dependency to get the database session
 def get_db():

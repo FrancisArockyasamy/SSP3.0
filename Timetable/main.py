@@ -5,7 +5,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from .database import engine
 
 Base = declarative_base()
-app = APIRouter()
+app = APIRouter(
+     prefix="/timetable",
+    tags=["Timetable"]
+)
 
 # Dependency to get the database session
 def get_db():
@@ -45,7 +48,7 @@ def create_subject(subject: schema.SubjectCreate, db: Session = Depends(get_db))
     db.refresh(db_subject)
     return db_subject
 
-@app.post("/teachers/", response_model=schema.TeacherBase)
+@app.post("/teachers/", response_model=schema.TeacherResponse)
 def create_teacher(teacher: schema.TeacherCreate, db: Session = Depends(get_db)):
     db_teacher = models.Teacher(**teacher.dict())
     db.add(db_teacher)
@@ -53,7 +56,7 @@ def create_teacher(teacher: schema.TeacherCreate, db: Session = Depends(get_db))
     db.refresh(db_teacher)
     return db_teacher
 
-@app.post("/classes/", response_model=schema.ClassBase)
+@app.post("/classes/", response_model=schema.ClassResponse)
 def create_class(class_: schema.ClassCreate, db: Session = Depends(get_db)):
     db_class = models.Class(**class_.dict())
     db.add(db_class)
@@ -61,7 +64,7 @@ def create_class(class_: schema.ClassCreate, db: Session = Depends(get_db)):
     db.refresh(db_class)
     return db_class
 
-@app.post("/timetables/", response_model=schema.TimetableBase)
+@app.post("/timetables/", response_model=schema.TimetableResponse)
 def create_timetable(timetable: schema.TimetableCreate, db: Session = Depends(get_db)):
     db_timetable = models.Timetable(**timetable.dict())
     db.add(db_timetable)
