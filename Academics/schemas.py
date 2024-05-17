@@ -39,6 +39,3 @@ class ClassScheduleAllocation(BaseModel):
   room_id: int
   date: str
   period: int
-
-  class Config:
-      orm_mode = True  # Set to True for automatic data conversion between ORM and schema
