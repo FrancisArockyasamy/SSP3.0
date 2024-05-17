@@ -1,12 +1,11 @@
-from fastapi import FastAPI
-import routers
-from routers import trips, passengers, vehicles,boarding_details,boarding_fees,fees,routes,passengers_by_bus,buses
-from models import Base
-from database import engine
+from fastapi import APIRouter
+from .routers import trips, passengers, vehicles,boarding_details,boarding_fees,fees,routes,passengers_by_bus,buses
+from .models import Base
+from .database import engine
 
 Base.metadata.create_all(bind= engine)
 
-app = FastAPI()
+app = APIRouter()
 
 # Include routers
 app.include_router(trips.router, prefix="/trips", tags=["trips"])
