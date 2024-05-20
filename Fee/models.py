@@ -73,6 +73,14 @@ class Concession(Base):
 
     student = relationship("Student", back_populates="concessions")
 
+class Classes(Base) :   
+    __tablename__ = "tbl_classes"
+    id = Column(Integer, primary_key=True, index=True)
+    name=Column(String(255))
+    description=Column(String(255))
+
+
+
 Base.metadata.create_all(bind= engine)
 
 # class Payment(Base):

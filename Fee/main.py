@@ -50,37 +50,37 @@ def FeePaymentCreate(payment: schemas.PaymentCreate, db: Session = Depends(get_d
     db.commit()
     return new_payment
 
-# Handle webhook events from Stripe
-@app.post("/webhook/")
-async def stripe_webhook(request: Request):
-    db = SessionLocal()
-    payload = await request.body()
-    sig_header = request.headers.get('Stripe-Signature')
+# Handle webhook events from Stripe  
+# @app.post("/webhook/")
+# async def stripe_webhook(request: Request):
+#     db = SessionLocal()
+#     payload = await request.body()
+#     sig_header = request.headers.get('Stripe-Signature')
 
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, "your_stripe_webhook_secret"
-        )
-    except ValueError as e:
-        # Invalid payload
-        return "Invalid payload", 400
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
-        return "Invalid signature", 400
+#     try:
+#         event = stripe.Webhook.construct_event(
+#             payload, sig_header, "your_stripe_webhook_secret"
+#         )
+#     except ValueError as e:
+#         # Invalid payload
+#         return "Invalid payload", 400
+#     except stripe.error.SignatureVerificationError as e:
+#         # Invalid signature
+#         return "Invalid signature", 400
 
-    # Handle the event
-    if event['type'] == 'payment_intent.succeeded':
-        payment_intent = event['data']['object']
-        payment = db.query(Payment).filter(Payment.payment_id == payment_intent['id']).first()
-        if payment:
-            payment.status = "succeeded"
-            db.commit()
-    elif event['type'] == 'payment_intent.payment_failed':
-        payment_intent = event['data']['object']
-        payment = db.query(Payment).filter(Payment.payment_id == payment_intent['id']).first()
-        if payment:
-            payment.status = "failed"
-            db.commit()
+#     # Handle the event
+#     if event['type'] == 'payment_intent.succeeded':
+#         payment_intent = event['data']['object']
+#         payment = db.query(Payment).filter(Payment.payment_id == payment_intent['id']).first()
+#         if payment:
+#             payment.status = "succeeded"
+#             db.commit()
+#     elif event['type'] == 'payment_intent.payment_failed':
+#         payment_intent = event['data']['object']
+#         payment = db.query(Payment).filter(Payment.payment_id == payment_intent['id']).first()
+#         if payment:
+#             payment.status = "failed"
+#             db.commit()
 
-    db.close()
-    return "Success"
+#     db.close()
+#     return "Success"
