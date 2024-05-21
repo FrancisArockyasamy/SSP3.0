@@ -2,70 +2,94 @@ from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 
-# class HomeworkSubmissionBase(BaseModel):
-#     student_id: int
-#     assignment_id: int
-#     submission_date: date
-#     status: str
-#     submitted_attachments: str
-
-# class HomeworkSubmissionCreate(HomeworkSubmissionBase):
-#     pass
-
 
 class HomeworkAssignmentBase(BaseModel):
-    teacher_id: int
-    subject_id: int
-    due_date: date
-    description: str
-    additional_instructions: Optional[str]
-    attachments: Optional[str]
+    teacherID: int
+    subjectID: int
+    dueDate: date
+    description: Optional[str] = None
+    additionalInstructions: Optional[str] = None
+    attachments: Optional[str] = None
+
+
 
 class HomeworkAssignmentCreate(HomeworkAssignmentBase):
     pass
 
 class HomeworkAssignment(HomeworkAssignmentBase):
-    assignment_id: int
-
-    class Config:
+    assignmentID: int
+class Config:
         from_orm = True
-
-
 class HomeworkSubmissionBase(BaseModel):
-    student_id: int
-    assignment_id: int
-    submission_date: date
-    status: str
-    submitted_attachments: Optional[str]
+    studentID: int
+    assignmentID: int
+    submissionDate: date  # Change to match SQLAlchemy model
+    status: str  # Change to match SQLAlchemy model
+    submittedAttachments: Optional[str]  # Change to match SQLAlchemy model
 
-class HomeworkSubmission(HomeworkSubmissionBase):
+
+
+class HomeworkSubmissionCreate(HomeworkSubmissionBase):
     pass
 
-class submission(HomeworkSubmissionBase):
-    submission_id: int
+class HomeworkSubmission(HomeworkSubmissionBase):
+    submissionID: int
+
+    class Config:
+        from_orm = True  # Ensure orm_mode is inside the BaseModel
+        
+
+class GradeBase(BaseModel):
+    assignmentID: int
+    studentID: int
+    submissionID:int
+    grade: float  # Change to match SQLAlchemy model
+    feedback: str  # Change to match SQLAlchemy model
 
     class Config:
         from_orm = True
-        
-
-
-# class HomeworkSubmission(HomeworkSubmissionBase):
-#     submission_id: int
-
-#     class Config:
-#         orm_mode = True
-
-class GradeBase(BaseModel):
-    assignment_id: int
-    student_id: int
-    grade: float
-    feedback: str
 
 class GradeCreate(GradeBase):
     pass
 
 class Grade(GradeBase):
-    grade_id: int
+    gradeID: int
 
-    class Config:
+# Pydantic Schemas
+class TeacherBase(BaseModel):
+    firstName: str
+    lastName: str
+    email: str
+
+class TeacherCreate(TeacherBase):
+    pass
+
+class Teacher(TeacherBase):
+    teacherID: int
+class Config:
+        from_orm = True
+
+class StudentBase(BaseModel):
+    firstName: str
+    lastName: str
+    email: str
+
+class StudentCreate(StudentBase):
+    pass
+
+class Student(StudentBase):
+    studentID: int
+
+class Config:
+        from_orm = True
+class SubjectBase(BaseModel):
+    subjectName: str
+
+class SubjectCreate(SubjectBase):
+    pass
+
+class Subject(SubjectBase):
+    subjectID: int
+
+class Config:
         from_orm = True
