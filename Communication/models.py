@@ -25,8 +25,8 @@ class SMS_Messages(Base):
     delivery_status = Column(String)
 
     template = relationship("SMS_Templates")
-    sender = relationship("Users", foreign_keys=[sender_id])
-    recipient = relationship("Users", foreign_keys=[recipient_id])
+    sender = relationship("Users", foreign_keys=[sender_id], overlaps="messages_sent")
+    recipient = relationship("Users", foreign_keys=[recipient_id], overlaps="messages_received")
 
 class Users(Base):
     __tablename__ = "tbl_users"
@@ -38,16 +38,16 @@ class Users(Base):
     email = Column(String)
     phone_number = Column(String)
 
-    groups = relationship("Groups", secondary="user_groups")
-    messages_sent = relationship("SMS_Messages", foreign_keys=[SMS_Messages.sender_id])
-    messages_received = relationship("SMS_Messages", foreign_keys=[SMS_Messages.recipient_id])
+    groups = relationship("Groups")
+    messages_sent = relationship("SMS_Messages", foreign_keys=[SMS_Messages.sender_id], overlaps="messages_received")
+    messages_received = relationship("SMS_Messages", foreign_keys=[SMS_Messages.recipient_id], overlaps="messages_sent")
     attendance_records = relationship("Attendance")
     timetable_entries = relationship("Timetable")
     exam_entries = relationship("Exam")
-    fee_reminders = relationship("Fee_Reminder")
+    fee_reminders = relationship("FeeReminder")
     remarks = relationship("Remarks")
-    ptm_notifications = relationship("PTM_Notification")
-    left_students = relationship("Left_Students")
+    ptm_notifications = relationship("PTMNotification")
+    left_students = relationship("LeftStudents")
     alumni = relationship("Alumni")
 
 class Groups(Base):
@@ -56,8 +56,8 @@ class Groups(Base):
     group_id = Column(Integer, primary_key=True, index=True)
     group_name = Column(String)
     group_type = Column(String)
-
-    members = relationship("Users", secondary="user_groups")
+    user_id = Column(Integer, ForeignKey("tbl_users.user_id", ondelete="CASCADE"))
+    members = relationship("Users")
 
 class User_Groups(Base):
     __tablename__ = "tbl_user_groups"

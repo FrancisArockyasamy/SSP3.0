@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, APIRouter
 from .database import SessionLocal, engine
-from .models import Base, SMS_Templates, Attendance, Timetable, Exam, FeeReminder, Remarks, PTMNotification, LeftStudents, Alumni
-from .schemas import SMS_TemplatesCreate,  AttendanceCreate, TimetableCreate, ExamCreate, FeeReminderCreate, RemarksCreate, PTMNotificationCreate, LeftStudentsCreate, AlumniCreate
+from .models import Base, Users, SMS_Templates, Attendance, Timetable, Exam, FeeReminder, Remarks, PTMNotification, LeftStudents, Alumni
+from .schemas import SMS_TemplatesCreate, User, UserCreate, AttendanceCreate, TimetableCreate, ExamCreate, FeeReminderCreate, RemarksCreate, PTMNotificationCreate, LeftStudentsCreate, AlumniCreate
 from sqlalchemy.orm import Session
 
 app = APIRouter(
@@ -19,13 +19,36 @@ def get_db():
     finally:
         db.close()
 
+
+@app.post("/create_user/", response_model=User)
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = Users(
+        user_type=user.user_type,
+        username=user.username,
+        password=user.password,  # In a real application, make sure to hash passwords
+        email=user.email,
+        phone_number=user.phone_number
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+@app.get("/get_user/{user_id}", response_model=User)
+async def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(Users).filter(Users.user_id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
 @app.post("/create_sms_template/")
 async def create_sms_template(template: SMS_TemplatesCreate, db: Session = Depends(get_db)):
     db_template = SMS_Templates(**template.dict())
     db.add(db_template)
     db.commit()
     db.refresh(db_template)
-    return template
+    return db_template
 
 @app.get("/get_sms_template/{template_id}")
 async def get_sms_template(template_id: int, db: Session = Depends(get_db)):

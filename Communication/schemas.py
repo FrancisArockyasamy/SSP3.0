@@ -1,5 +1,7 @@
-from pydantic import BaseModel
-from typing import List
+from pydantic import BaseModel, EmailStr
+from typing import List, Optional
+from datetime import date
+
 
 class SMS_TemplatesBase(BaseModel):
     template_name: str
@@ -13,8 +15,26 @@ class AttendanceBase(BaseModel):
     date: str
     status: str
 
+class UserBase(BaseModel):
+    user_type: str
+    username: str
+    email: EmailStr
+    phone_number: str
+
+class UserCreate(UserBase):
+    password: str
+
+class User(UserBase):
+    user_id: int
+
+    class Config:
+        orm_mode = True
+
+
 class AttendanceCreate(AttendanceBase):
-    pass
+    user_id: int
+    date: date
+    status: str
 
 class TimetableBase(BaseModel):
     day: str
