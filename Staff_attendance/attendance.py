@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from .database import SessionLocal
 from .models import Attendance
 from . import schema
+from typing import List
 
 router = APIRouter()
 
@@ -17,6 +18,7 @@ def get_db():
 # Example endpoint to create an attendance record
 @router.post("/attendance/", response_model=schema.Attendance)
 def create_attendance_record(attendance: schema.Attendance, db: Session = Depends(get_db)):
+    del attendance.id
     db_data = Attendance(**attendance.dict())  # Assuming models.Attendance is properly defined
     db.add(db_data)
     db.commit()
@@ -24,9 +26,9 @@ def create_attendance_record(attendance: schema.Attendance, db: Session = Depend
     return db_data
 
 # Example endpoint to get a specific attendance record by ID
-@router.get("/attendance/{attendance_id}", response_model=schema.Attendance)
-def read_attendance_record(attendance_id: int, db: Session = Depends(get_db)):
-    attendance = db.query(Attendance).filter(Attendance.id == attendance_id).first()
+@router.get("/attendance/", response_model=List[schema.Attendance])
+def read_attendance_record( db: Session = Depends(get_db)):
+    attendance = db.query(Attendance).all()
     if not attendance:
         raise HTTPException(status_code=404, detail="Attendance record not found")
     return attendance

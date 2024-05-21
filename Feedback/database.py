@@ -1,22 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from databases import Database
-from sqlalchemy_utils import create_database, database_exists
 
-DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost/feedback1"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/feedback"
 
-database = Database(DATABASE_URL)
-engine = create_engine(DATABASE_URL.replace("asyncpg", "psycopg2"))
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, expire_on_commit=False, bind=engine)
 
-
-if not database_exists(engine.url):
-    create_database(engine.url)
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-async def get_db():
+def get_db():
     db = SessionLocal()
     try:
         yield db

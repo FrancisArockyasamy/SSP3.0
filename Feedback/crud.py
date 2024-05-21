@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-import models, schemas
-import crud
+from .import models, schemas
+from .import crud
 
 
 def get_feedback(db: Session, feedback_id: int):

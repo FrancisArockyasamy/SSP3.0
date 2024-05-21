@@ -12,7 +12,7 @@ class Employee(BaseModel):
 
 
 class Attendance(BaseModel):
-    id: Optional[int]
+    id: Optional[int]= None
     employee_id: int
     attendance_date: date
     attendance_status: str

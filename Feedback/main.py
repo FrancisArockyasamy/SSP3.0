@@ -1,22 +1,12 @@
-from fastapi import APIRouter
-from .database import database, engine, Base
-from .feedback import user, feedback_form, question, response, objective
+from fastapi import FastAPI, APIRouter
+from .database import engine
+from . import models
+from .routers import feedback
 
-Base.metadata.create_all(bind=engine)
 
+models.Base.metadata.create_all(bind=engine)
 app = APIRouter()
-
-app.include_router(user.router)
-app.include_router(feedback_form.router)
-app.include_router(question.router)
-# app.include_router(feedback_session.router)
-app.include_router(response.router)
-app.include_router(objective.router)
-
-@app.on_event("startup")
-async def startup():
-    await database.connect()
-
-@app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
+app.include_router(feedback.router)
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the School Fee Module API"}
