@@ -106,6 +106,7 @@ class Fee(FeeBase):
         
 class FeeGet(FeeBase):
     fee_id: int
+    trip_id: int
     class Config:
         orm_mode = True
 
@@ -149,5 +150,6 @@ class BusCreate(BaseModel):
     description: str
 
 class Bus(BaseModel):
+    id:int
     bus_number: str
     description: str
