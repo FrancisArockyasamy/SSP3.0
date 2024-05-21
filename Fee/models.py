@@ -3,6 +3,23 @@ from sqlalchemy.orm import relationship
 from .database import Base,engine
 
 
+class FeePayment(Base):
+    __tablename__ = "tbl_fee_payments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(Integer, ForeignKey("tbl_students.id"))
+    fee_structure_id = Column(Integer, ForeignKey("tbl_fee_structures.id"))
+    payment_date = Column(Date)
+    amount_paid = Column(Float)
+    payment_method = Column(String(255))
+    receipt_number = Column(String(255))
+    status = Column(String(255))
+
+    student = relationship("Student", back_populates="fee_payments")
+    fee_structure = relationship("FeeStructure", back_populates="fee_payments")
+    refund = relationship("Refund", back_populates="fee_payment")  # Add this line
+
+
 class FeeStructure(Base):
     __tablename__ = "tbl_fee_structures"
 
@@ -13,6 +30,8 @@ class FeeStructure(Base):
 
     fee_type = relationship("FeeType", back_populates="fee_structures")
     class_ = relationship("Class", back_populates="fee_structures")
+    fee_payments = relationship("FeePayment", back_populates="fee_structure")  # Add this line
+
 
 class FeeType(Base):
     __tablename__ = "tbl_fee_types"
@@ -34,21 +53,8 @@ class Student(Base):
 
     class_ = relationship("Class", back_populates="students")
     fee_payments = relationship("FeePayment", back_populates="student")
+    concessions = relationship("Concession", back_populates="student")  # Add this line
 
-class FeePayment(Base):
-    __tablename__ = "tbl_fee_payments"
-
-    id = Column(Integer, primary_key=True, index=True)
-    student_id = Column(Integer, ForeignKey("tbl_students.id"))
-    fee_structure_id = Column(Integer, ForeignKey("tbl_fee_structures.id"))
-    payment_date = Column(Date)
-    amount_paid = Column(Float)
-    payment_method = Column(String(255))
-    receipt_number = Column(String(255))
-    status = Column(String(255))
-
-    student = relationship("Student", back_populates="fee_payments")
-    fee_structure = relationship("FeeStructure", back_populates="fee_payments")
 
 class Refund(Base):
     __tablename__ = "tbl_refunds"
@@ -60,6 +66,7 @@ class Refund(Base):
     refund_reason = Column(String(255))
 
     fee_payment = relationship("FeePayment", back_populates="refund")
+
 
 class Concession(Base):
     __tablename__ = "tbl_concessions"
@@ -73,21 +80,14 @@ class Concession(Base):
 
     student = relationship("Student", back_populates="concessions")
 
-class Classes(Base) :   
+
+class Class(Base): 
     __tablename__ = "tbl_classes"
     id = Column(Integer, primary_key=True, index=True)
-    name=Column(String(255))
-    description=Column(String(255))
+    name = Column(String(255))
+    description = Column(String(255))
+    students = relationship("Student", back_populates="class_")
+    fee_structures = relationship("FeeStructure", back_populates="class_")
 
 
-
-Base.metadata.create_all(bind= engine)
-
-# class Payment(Base):
-#     __tablename__ = 'tbl_payments'
-
-#     id = Column(Integer, primary_key=True, index=True)
-#     amount = Column(Float)
-#     currency = Column(String(255) )
-#     description = Column(String(255))
-#     status = Column(String(255))
+Base.metadata.create_all(bind=engine)
