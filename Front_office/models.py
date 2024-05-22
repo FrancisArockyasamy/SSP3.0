@@ -13,8 +13,8 @@ class Visitor(Base):
     email = Column(String(255))
     phone_number = Column(String(255))
     purpose_of_visit = Column(String(255))
-    check_in_time = Column(DateTime)
-    check_out_time = Column(DateTime)
+    check_in_time = Column(DateTime,nullable=True)
+    check_out_time = Column(DateTime,nullable=True)
 
 class Package(Base):
     __tablename__ = 'tbl_packages'
@@ -25,8 +25,8 @@ class Package(Base):
     recipient_name = Column(String(255))
     recipient_address = Column(String(255))
     delivery_status = Column(String(255))
-    received_at = Column(DateTime)
-    delivered_at = Column(DateTime)
+    received_at = Column(DateTime,nullable=True)
+    delivered_at = Column(DateTime,nullable=True)
 
 class Call(Base):
     __tablename__ = 'tbl_calls'
@@ -37,8 +37,8 @@ class Call(Base):
     recipient_name = Column(String(255))
     recipient_number = Column(String(255))
     call_purpose = Column(String(255))
-    call_type = Column(String(255))
-    call_time = Column(DateTime)
+    call_type = Column(String(255),nullable=True)
+    call_time = Column(DateTime,nullable=True)
 
 class GatePass(Base):
     __tablename__ = 'tbl_gate_passes'
@@ -47,8 +47,8 @@ class GatePass(Base):
     visitor_id = Column(Integer, ForeignKey('tbl_visitors.visitor_id'))
     staff_member_id = Column(Integer, ForeignKey('tbl_staff_members.staff_member_id'))
     purpose = Column(String(255))
-    issued_at = Column(DateTime)
-    valid_until = Column(DateTime)
+    issued_at = Column(DateTime,nullable=True)
+    valid_until = Column(DateTime,nullable=True)
 
 class StaffMember(Base):
     __tablename__ = 'tbl_staff_members'
@@ -67,7 +67,7 @@ class Circular(Base):
     title = Column(String(255))
     content = Column(String(255))
     author = Column(String(255))
-    date_published = Column(DateTime)
+    date_published = Column(DateTime,nullable=True)
 
 class Complaint(Base):
     __tablename__ = 'tbl_complaints'
@@ -78,7 +78,7 @@ class Complaint(Base):
     complaint_type = Column(String(255))
     description = Column(String(255))
     status = Column(String(255))
-    date_reported = Column(DateTime)
-    date_resolved = Column(DateTime)
+    date_reported = Column(DateTime,nullable=True)
+    date_resolved = Column(DateTime,nullable=True)
 
 Base.metadata.create_all(bind= engine)
