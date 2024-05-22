@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey,JSON
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -78,3 +78,11 @@ class Bus(Base):
     id = Column(Integer, primary_key=True, index=True)
     bus_number = Column(String, unique=True, index=True)
     description = Column(String)
+
+class PassengerByBus(Base):
+    __tablename__ = "tbl_passenger_by_bus"
+    id = Column(Integer, primary_key=True, index=True)
+    trip_id = Column(Integer, ForeignKey("tbl_trips.trip_id"))
+    bus_id = Column(Integer,ForeignKey("tbl_buses.id"))
+    description = Column(String)
+    passengers = Column(JSON)

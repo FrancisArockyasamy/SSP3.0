@@ -1,31 +1,53 @@
-from fastapi import APIRouter,Depends,HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from .. import models,database,schemas
+from typing import List
+from ..models import PassengerByBus
+from .. import schemas
+from ..database import get_db
 
 router = APIRouter()
 
-@router.get("/passengers_by_bus/{bus_number}")
-async def get_passengers_by_bus(bus_number: str, db: Session = Depends(database.get_db)):
-    passenger_by_bus = db.query(models.Bus).filter(models.Bus.bus_number == bus_number).first()
-    return passenger_by_bus
+# Create a new passenger by bus record
+@router.post("/passengers_by_bus/", response_model=schemas.PassengerByBus)
+def create_passenger_by_bus(passenger_by_bus: schemas.PassengerByBusCreate, db: Session = Depends(get_db)):
+    new_passenger_by_bus = PassengerByBus(**passenger_by_bus.dict())
+    db.add(new_passenger_by_bus)
+    db.commit()
+    db.refresh(new_passenger_by_bus)
+    return new_passenger_by_bus
 
-# @router.put("/passengers_by_bus/{trip_number}/{bus_number}", response_model=schemas.PassengerByBus)
-# async def update_passengers_by_bus(trip_number: str, bus_number: str, passengers: schemas.PassengerByBus, db: Session = Depends(database.get_db)):
-#     bus = db.query(models.Bus).filter(models.Bus.trip_number == trip_number, models.Bus.bus_number == bus_number).first()
-#     if not bus:
-#         raise HTTPException(status_code=404, detail="Bus not found")
+# Get a list of all passengers by bus records
+@router.get("/passengers_by_bus/", response_model=List[schemas.PassengerByBus])
+def read_passengers_by_bus(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    passengers_by_bus = db.query(PassengerByBus).offset(skip).limit(limit).all()
+    return passengers_by_bus
 
-#     bus.passengers = passengers.passengers  # Assuming `passengers` is a column in your `Bus` model
-#     db.commit()
-#     db.refresh(bus)
-#     return passengers
+# Get a single passenger by bus record by ID
+@router.get("/passengers_by_bus/{passenger_by_bus_id}", response_model=schemas.PassengerByBus)
+def read_passenger_by_bus(passenger_by_bus_id: int, db: Session = Depends(get_db)):
+    db_passenger_by_bus = db.query(PassengerByBus).filter(PassengerByBus.id == passenger_by_bus_id).first()
+    if db_passenger_by_bus is None:
+        raise HTTPException(status_code=404, detail="Passenger by bus not found")
+    return db_passenger_by_bus
 
-# @router.delete("/passengers_by_bus/{trip_number}/{bus_number}")
-# async def delete_passengers_by_bus(trip_number: str, bus_number: str, db: Session = Depends(database.get_db)):
-#     bus = db.query(models.Bus).filter(models.Bus.trip_number == trip_number, models.Bus.bus_number == bus_number).first()
-#     if not bus:
-#         raise HTTPException(status_code=404, detail="Bus not found")
+# Update a passenger by bus record by ID
+@router.put("/passengers_by_bus/{passenger_by_bus_id}", response_model=schemas.PassengerByBus)
+def update_passenger_by_bus(passenger_by_bus_id: int, passenger_by_bus: schemas.PassengerByBusUpdate, db: Session = Depends(get_db)):
+    db_passenger_by_bus = db.query(PassengerByBus).filter(PassengerByBus.id == passenger_by_bus_id).first()
+    if db_passenger_by_bus is None:
+        raise HTTPException(status_code=404, detail="Passenger by bus not found")
+    for key, value in passenger_by_bus.dict().items():
+        setattr(db_passenger_by_bus, key, value)
+    db.commit()
+    db.refresh(db_passenger_by_bus)
+    return db_passenger_by_bus
 
-#     db.delete(bus)
-#     db.commit()
-#     return {"message": "Deleted successfully"}
+# Delete a passenger by bus record by ID
+@router.delete("/passengers_by_bus/{passenger_by_bus_id}", response_model=schemas.PassengerByBus)
+def delete_passenger_by_bus(passenger_by_bus_id: int, db: Session = Depends(get_db)):
+    db_passenger_by_bus = db.query(PassengerByBus).filter(PassengerByBus.id == passenger_by_bus_id).first()
+    if db_passenger_by_bus is None:
+        raise HTTPException(status_code=404, detail="Passenger by bus not found")
+    db.delete(db_passenger_by_bus)
+    db.commit()
+    return db_passenger_by_bus

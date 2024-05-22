@@ -153,3 +153,21 @@ class Bus(BaseModel):
     id:int
     bus_number: str
     description: str
+    
+class PassengerByBusBase(BaseModel):
+    trip_id: int
+    bus_id: int
+    description: Optional[str] = None
+    passengers: List[str] 
+
+class PassengerByBusCreate(PassengerByBusBase):
+    pass
+
+class PassengerByBusUpdate(PassengerByBusBase):
+    pass
+
+class PassengerByBus(PassengerByBusBase):
+    id: int
+
+    class Config:
+        orm_mode: True
